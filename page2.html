@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+        <img id="megjelenitendoKep" src="">
+    </div>
+    <div id="navigacio">
+        <button id="elozoKep">Előző</button>
+        <button id="kovetkezoKep">Következő</button>
+    </div>
+
+    <script>
+        let apiUrl = 'https://via.assets.so/movie.jpg?id=';
+        let osszesKep = 10;
+        let jelenlegiKepId = 1;
+
+        function elozoKepMegjelenites()
+        {
+            jelenlegiKepId = (jelenlegiKepId - 1) > 0 ? (jelenlegiKepId - 1) : osszesKep;
+            kepBetoltes();
+        }
+
+        function kovetkezoKepMegjelenites()
+        {
+            jelenlegiKepId = (jelenlegiKepId + 1) <= osszesKep ? (jelenlegiKepId + 1) : 1;
+            kepBetoltes();
+        }
+
+        function kepBetoltes()
+        {
+            let imageUrl = apiUrl + jelenlegiKepId;
+
+            $.ajax({
+                url: imageUrl,
+                method: "GET"
+            })
+            .done(function (data) {
+                $("#megjelenitendoKep").attr("src", imageUrl);
+            })
+            .fail(function (error) {
+                console.error("Hiba a kép betöltésekor:", error);
+            });
+        }
+
+        $("#elozoKep").on("click", elozoKepMegjelenites);
+        $("#kovetkezoKep").on("click", kovetkezoKepMegjelenites);
+
+        // Kezdeti kép betöltése
+        kepBetoltes();
+    </script>
+</body>
+</html>
